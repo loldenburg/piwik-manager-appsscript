@@ -255,7 +255,8 @@ function piwik_tags_edit_and_sync() {
     activateTab(sheetName);
 
     var ui = SpreadsheetApp.getUi();
-    var response = ui.alert("Confirm", "This will edit or delete the Tags marked with 'edit' or 'delete' in the 'EDIT/DELETE' column, and then sync the updates in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
+    var response = ui.alert("Confirm", "This will edit or delete the Tags marked with 'edit' or 'delete' in the " +
+        "'EDIT/DELETE' column, and then sync the updates in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
     if (response === ui.Button.CANCEL) {
         return;  // Exit if the user cancels
     }
@@ -263,6 +264,24 @@ function piwik_tags_edit_and_sync() {
     var msg = "Editing and Syncing Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tags_edit_and_sync"});
+}
+
+function piwik_tags_copy() {
+    var sheetName = "Tags";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will copy the Tags to the sites selected in the 'COPY TO' column. " +
+        "Copying will only be done if no tag of the same name exists in the destination sites. If you do NOT want to copy " +
+        "triggers with the tag, change the dropdown in cell P2." +
+        "\n\nContinue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Copying Tags. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_tags_copy"});
 }
 
 function piwik_tagdetails_edit() {
