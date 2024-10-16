@@ -1,0 +1,15 @@
+!/package.json
+!/package-lock.json
+.idea/
+.idea/**
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/csv-plugin.xml
+.idea/dim28-repo.iml
+.idea/misc.xml
+.idea
+**.idea
+[Dd]esktop.ini
