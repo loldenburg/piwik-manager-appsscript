@@ -790,8 +790,8 @@ function customOnEdit(event) {
     var edit_colMap = {
         "Tags": "N",
         "TagDetails": "T",
-        "Variables": "M",
-        "Triggers": "N",
+        "Variables": "Z",
+        "Triggers": "T",
         "CustomDimensions": "M"
     };
     var firstDataRow = 5;
