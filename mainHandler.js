@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-// Version: 2024-10-16-1
+// Version: 2024-10-18-1
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -159,6 +159,7 @@ function getMenuObj() {
         {
             m_type: 'sub', label: 'Variables', sub: [
                 {m_type: 'fn', label: 'Refresh Variables', fn: 'piwik_variables_refresh'},
+                {m_type: 'fn', label: 'Refresh Variables with Usage Info', fn: 'piwik_variables_refresh_with_usage'},
                 {m_type: 'fn', label: 'Edit/Delete Variables', fn: 'piwik_variables_edit'},
                 {m_type: 'fn', label: 'Copy Variables', fn: 'piwik_variables_copy'},
                 {m_type: 'fn', label: 'Sync Variables', fn: 'piwik_variables_sync'}
@@ -392,7 +393,6 @@ function piwik_customdimensions_edit_and_sync() {
     trigger_server({"script": "piwik_customdimensions_edit_and_sync"});
 }
 
-
 function piwik_variables_refresh() {
     var sheetName = "Variables";
     activateTab(sheetName);
@@ -400,6 +400,25 @@ function piwik_variables_refresh() {
     var msg = "Refreshing Variables. Please wait. " + filter_warning;
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_variables_refresh"});
+    removeFiltersFromSheet(sheetName);
+}
+
+function piwik_variables_refresh_with_usage() {
+    var sheetName = "Variables";
+    activateTab(sheetName);
+    var ui = SpreadsheetApp.getUi();
+
+    var response = ui.alert("Confirm", "This will refresh the Variables including the 'used_in' columns. " +
+        "The data in these columns will be based on the current state of " +
+        "the 'TagDetails' and 'Triggers' tabs. If those tabs are not up to date, refresh them first, " +
+        "and then run this function again." +
+        "\n\nContinue with Variables refresh incl. Usage data?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;
+    }
+    var msg = "Refreshing Variables with Usage stats based on the 'TagDetails' and 'Triggers' tabs. Please wait. " + filter_warning;
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_variables_refresh_with_usage"});
     removeFiltersFromSheet(sheetName);
 }
 
@@ -789,8 +808,8 @@ function customOnEdit(event) {
     //console.log("rowSTart, End, ColSTart, End", rowStart, rowEnd, colStart, colEnd);
     var edit_colMap = {
         "Tags": "N",
-        "TagDetails": "T",
-        "Variables": "Z",
+        "TagDetails": "Z",
+        "Variables": "T",
         "Triggers": "T",
         "CustomDimensions": "M"
     };
