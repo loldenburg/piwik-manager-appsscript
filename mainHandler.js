@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-// Version: 2024-10-18-2
+// Version: 2024-10-18-3
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -130,15 +130,6 @@ function getMenuObj() {
             ]
         },
         {
-            m_type: 'sub', label: 'Custom Dimensions', sub: [
-                {m_type: 'fn', label: 'Refresh Custom Dimensions', fn: 'piwik_customdimensions_refresh'},
-                {m_type: 'fn', label: 'Edit Custom Dimensions', fn: 'piwik_customdimensions_edit'},
-                {m_type: 'fn', label: 'Sync Custom Dimensions', fn: 'piwik_customdimensions_sync'},
-                {m_type: 'fn', label: 'Edit & Sync Custom Dimensions', fn: 'piwik_customdimensions_edit_and_sync'},
-                {m_type: 'fn', label: 'Clone Custom Dimensions ("Sites" tab)', fn: 'piwik_customdimensions_clone'}
-            ]
-        },
-        {
             m_type: 'sub', label: 'Tags', sub: [
                 {m_type: 'fn', label: 'Refresh Tags', fn: 'piwik_tags_refresh'},
                 {m_type: 'fn', label: 'Refresh Tags & TagDetails', fn: 'piwik_tags_refresh_with_details'},
@@ -170,6 +161,23 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Refresh Triggers', fn: 'piwik_triggers_refresh'},
                 {m_type: 'fn', label: 'Edit/Delete Triggers', fn: 'piwik_triggers_edit'},
                 {m_type: 'fn', label: 'Copy Triggers', fn: 'piwik_triggers_copy'}
+            ]
+        },
+        {
+            m_type: 'sub', label: 'Custom Dimensions', sub: [
+                {m_type: 'fn', label: 'Refresh Custom Dimensions', fn: 'piwik_customdimensions_refresh'},
+                {m_type: 'fn', label: 'Edit Custom Dimensions', fn: 'piwik_customdimensions_edit'},
+                {m_type: 'fn', label: 'Sync Custom Dimensions', fn: 'piwik_customdimensions_sync'},
+                {m_type: 'fn', label: 'Edit & Sync Custom Dimensions', fn: 'piwik_customdimensions_edit_and_sync'},
+                {m_type: 'fn', label: 'Clone Custom Dimensions ("Sites" tab)', fn: 'piwik_customdimensions_clone'}
+            ]
+        },
+        {
+            m_type: 'sub', label: 'Goals', sub: [
+                {m_type: 'fn', label: 'Refresh Goals', fn: 'piwik_goals_refresh'},
+                {m_type: 'fn', label: 'Delete Goals', fn: 'piwik_goals_delete'},
+                {m_type: 'fn', label: 'Sync Goals', fn: 'piwik_goals_sync'},
+                {m_type: 'fn', label: 'Copy Goals', fn: 'piwik_goals_copy'}
             ]
         },
         {
@@ -514,6 +522,69 @@ function piwik_triggers_copy() {
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_triggers_copy"});
 }
+
+function piwik_goals_refresh() {
+    var sheetName = "Goals";
+    activateTab(sheetName);
+
+    var msg = "Refreshing Goals. Please wait. " + filter_warning;
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_goals_refresh"});
+    removeFiltersFromSheet("Tags");
+}
+
+function piwik_goals_delete() {
+    var sheetName = "Goals";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    ui.alert("Still in development", ui.ButtonSet.OK);
+    /*
+    var response = ui.alert("Confirm", "This will delete the Goals marked with 'delete' in the 'DELETE' column. " +
+        "Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Deleting Goals. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_goals_delete"});*/
+}
+
+function piwik_goals_sync() {
+    var sheetName = "Goals";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    ui.alert("Still in development", ui.ButtonSet.OK);
+    /*
+    var response = ui.alert("Confirm", "This will delete the Goals marked with 'delete' in the 'DELETE' column. " +
+        "Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Deleting Goals. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_goals_sync"});*/
+}
+
+function piwik_goals_copy() {
+    var sheetName = "Goals";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will create goals of the same name and definition in the sites " +
+        "selected in the 'COPY TO' column. Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Copying Goals. Please wait and follow the progress in the Status area.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_goals_copy"});
+}
+
 
 // OTHER
 
