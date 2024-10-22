@@ -1,18 +1,16 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-// Version: 2024-10-18-4
+// Version: 2024-10-22-1
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
 var gsheets_id = spreadsheet.getId();
-// TODO move the secret to Secret Manager and out of the sheet (set only once with setup)
 var piwik_org_prefix = "";
 var piwik_client_id = "";
 var piwik_client_secret = "";
 try {
     piwik_org_prefix = getConfigSettings('piwik_org_prefix');
     piwik_client_id = getConfigSettings('piwik_client_id');
-    piwik_client_secret = getConfigSettings('piwik_client_secret');
 } catch (e) {
     console.log('Could not get api settings from config, probably a new sheet', e);
 }
@@ -87,7 +85,6 @@ function trigger_server(payload, sync) {
     var payload_defaults = {
         "piwik_org_prefix": piwik_org_prefix,
         "piwik_client_id": piwik_client_id,
-        "piwik_client_secret": piwik_client_secret,
         "gsheets_id": gsheets_id,
         "topic": "piwik_mgr"
     };
@@ -1051,7 +1048,7 @@ function guidedSetup() {
         if (org_prefix_response.getResponseText()) {
             org_prefix = org_prefix_response.getResponseText();
             setConfigSettings(org_prefix_key, null, org_prefix);
-            piwik_org_prefix = org_prefix;
+            piwik_org_prefix = org_prefix; // overwrite global variable
         }
     } else {
         showCancelToast();
@@ -1084,8 +1081,7 @@ function guidedSetup() {
         // console.log('response3:', response3.getResponseText());
         if (response3.getResponseText()) {
             secret = response3.getResponseText();
-            setConfigSettings(secret_key, null, secret);
-            piwik_client_secret = secret;
+            // do not store in sheet for security reasons
         }
     } else {
         showCancelToast();
