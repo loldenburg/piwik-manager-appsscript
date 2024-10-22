@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-// Version: 2024-10-22-1
+// Version: 2024-10-22-2
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -1071,16 +1071,15 @@ function guidedSetup() {
         return false;
     }
 
-    // 30 Secret (TODO do not store in sheet for security reasons)
+    // 30 Secret
     var secret_key = 'piwik_client_secret';
-    var secret = getConfigSettings(secret_key);
-    var secret_msg = "\nCurrent Secret: \n" + secret;
-
+    var secret_msg = "\n(not exposed in sheet for security reasonns)";
+    var secret = null;
     var response3 = ui.prompt('Confirm (leave blank) or change your "Client Secret"', secret_msg, ui.ButtonSet.OK_CANCEL);
     if (response3.getSelectedButton() === ui.Button.OK) {
         // console.log('response3:', response3.getResponseText());
         if (response3.getResponseText()) {
-            secret = response3.getResponseText();
+            secret = response3.getResponseText() || secret;
             // do not store in sheet for security reasons
         }
     } else {
