@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-// Version: 2024-11-05-1
+var version = "2024-11-23-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -184,6 +184,7 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Populate all Tabs', fn: 'piwik_refresh_all_tabs'},
                 {m_type: 'fn', label: 'Delete all Piwik Manager Tabs', fn: 'deleteAllPiwikMgrSheets'},
                 {m_type: 'fn', label: 'Terms & Conditions', fn: 'showTerms'},
+                {m_type: 'fn', label: 'Version Info', fn: 'showVersion'},
                 {m_type: 'fn', label: 'Contact', fn: 'showContact'}
             ]
         }
@@ -254,6 +255,23 @@ function piwik_tags_edit() {
     var msg = "Editing Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tags_edit"});
+}
+
+function piwik_tags_sync() {
+    var sheetName = "Tags";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will sync the Tags in the destination sites selected in " +
+        "the 'SYNC IN' column. 'Synching' means Tags of the same name will be updated to the same definition as " +
+        "in the source site. \n\nContinue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Syncing Tags. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_tag_sync"});
 }
 
 function piwik_tags_edit_and_sync() {
@@ -925,6 +943,11 @@ function showTerms(showSetupInfo) { // TODO
     <p style="font-family: Calibri,sans-serif">(If you are on a paid plan, your terms were part of the contract you signed).</p>
     `).setWidth(300).setHeight(300);
     ui.showModalDialog(htmlTerms, 'Terms and Conditions');
+}
+
+function showVersion() {
+    var ui = SpreadsheetApp.getUi();
+    ui.alert("Version: " + version, ui.ButtonSet.OK);
 }
 
 /**
