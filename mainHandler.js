@@ -131,7 +131,7 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Refresh Tags', fn: 'piwik_tags_refresh'},
                 {m_type: 'fn', label: 'Refresh Tags & TagDetails', fn: 'piwik_tags_refresh_with_details'},
                 {m_type: 'fn', label: 'Edit/Delete Tags', fn: 'piwik_tags_edit'},
-                {m_type: 'fn', label: 'Sync Tags in other Sites', fn: 'piwik_tags_sync'},
+                {m_type: 'fn', label: 'Sync Tags', fn: 'piwik_tags_sync'},
                 {m_type: 'fn', label: 'Edit and Sync Tags', fn: 'piwik_tags_edit_and_sync'}, // Missing function added
                 {m_type: 'fn', label: 'Copy Tags', fn: 'piwik_tags_copy'}
             ]
