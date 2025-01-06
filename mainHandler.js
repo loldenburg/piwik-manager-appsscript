@@ -271,7 +271,7 @@ function piwik_tags_sync() {
 
     var msg = "Syncing Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
-    trigger_server({"script": "piwik_tag_sync"});
+    trigger_server({"script": "piwik_tags_sync"});
 }
 
 function piwik_tags_edit_and_sync() {
