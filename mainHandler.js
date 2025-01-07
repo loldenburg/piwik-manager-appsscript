@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-01-06-1";
+var version = "2025-01-07-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -673,7 +673,7 @@ function deleteAllPiwikMgrSheets() {
  * @param {Boolean} silent - deactivates prompts
  * @param {Boolean} firstRun - true if the sheet is created for the first time (config and update_log tab will also be imported)
  */
-function sheetRecreation(silent, firstRun) { // TODO
+function sheetRecreation(silent, firstRun) {
 
     if (firstRun !== true) {
         firstRun = false;
@@ -686,7 +686,7 @@ function sheetRecreation(silent, firstRun) { // TODO
     var ss_source = SpreadsheetApp.openById(master_id);
 
     if (!silent) {
-        var result = ui.alert('This function (re)creates all Component Manager sheets ("tabs") apart from ' +
+        var result = ui.alert('This function (re)creates all Piwik Pro Manager sheets ("tabs") apart from ' +
             '"Config" and additional sheets that you may have created. \nStart (re)creating sheet?',
             ui.ButtonSet.OK_CANCEL);
         if (result !== ui.Button.OK) return false;
@@ -805,8 +805,9 @@ function sheetRecreation(silent, firstRun) { // TODO
         var ssp_t = ss_cur.getSheetByName(tmpSheetName);
         if (!ssp_t) ssp_t = ss_cur.insertSheet().setName(tmpSheetName); // there was a case when 'update_log' was missing for some reason.
     }
-    ss_cur.toast("Finished (re)creating sheet!", "All done", 10);
+    ss_cur.toast("Finished (re)creating sheet! Now populating 'Sites' tab. Select Sites there from which to pull components.", "All done", 10);
     SpreadsheetApp.flush();
+    piwik_sites_refresh();
 }
 
 /**
@@ -1132,6 +1133,7 @@ function guidedSetup() {
         console.error('Error in setup response:', e);
         spreadsheet.toast("Setup failed with an unexpected error. Please contact support (lukas.oldenburg@dim28.ch).", "Setup result", -1);
     }
+    piwik_sites_refresh();
 }
 
 function recreateThisTab() {
