@@ -930,8 +930,6 @@ function customOnEdit(event) {
  */
 function showTerms(showSetupInfo) { // TODO
     var ui = SpreadsheetApp.getUi();
-    ui.alert("This function is not implemented yet.");
-    return false;
 
     var setupInfoText = "";
     if (showSetupInfo) {
@@ -939,7 +937,7 @@ function showTerms(showSetupInfo) { // TODO
     }
     var htmlTerms = HtmlService.createHtmlOutput(`
    
-    <h3 style="font-family: Calibri,sans-serif">See the <a href="https://docs.datacroft.de/terms-and-conditions" target="_blank">terms & conditions</a> for the free trial version and our <a href="https://docs.datacroft.de/what-data-is-processed-and-stored-where" target="_blank">data protection info</a>.</h3>
+    <h3 style="font-family: Calibri,sans-serif">See the <a href="https://github.com/loldenburg/piwik-manager-appsscript/blob/main/terms_and_conditions.md" target="_blank">terms & conditions</a> for the free trial version and our <a href="https://docs.datacroft.de/what-data-is-processed-and-stored-where" target="_blank">data protection info</a>.</h3>
     ` + setupInfoText + `
     <p style="font-family: Calibri,sans-serif">(If you are on a paid plan, your terms were part of the contract you signed).</p>
     `).setWidth(300).setHeight(300);
