@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-01-07-1";
+var version = "2025-01-17-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -74,19 +74,29 @@ function getMenuName() {
  * calls the web app doPost handler
  * @param {object} payload - JSONifiable payload (at least `script: "script_name"`)
  * @param {boolean} [sync] - if true, returns response from server synchronously
+ * @param {boolean} [checkSetupState=true] - if true, checks if the setup is complete before continuing
+ * @param {boolean} [checkSiteState=true] - if true, checks if sites to generate data for are selected before continuing
  * @returns {any} response of web app
  */
-function trigger_server(payload, sync) {
+function trigger_server(payload, sync, checkSetupState, checkSiteState) {
     // uncomment this for times of maintenance
     /* var ui = SpreadsheetApp.getUi();
     ui.alert("We are undergoing maintenance. This should be over by Saturday morning 11:00 AM UTC.");
     return {error: "maintenance"};
     */
+    checkSetupState = checkSetupState === undefined ? true : checkSetupState;
+    if (checkSetupState && hasSetupFinishedAlert(true) === false) {
+        return {error: "setup not finished"};
+    }
+    if (checkSiteState && areSitesSelected(true) === false) {
+        return {error: "no sites selected"};
+    }
     var payload_defaults = {
         "piwik_org_prefix": piwik_org_prefix,
         "piwik_client_id": piwik_client_id,
         "gsheets_id": gsheets_id,
-        "topic": "piwik_mgr"
+        "topic": "piwik_mgr",
+        "apps_script_version": version
     };
 
     for (var key in payload_defaults) {
@@ -200,7 +210,7 @@ function piwik_sites_refresh() {
 
     var msg = "Refreshing Sites. Please wait. " + filter_warning;
     show_update_running_msg(msg, "Status", 10);
-    trigger_server({"script": "piwik_sites_refresh"});
+    trigger_server({"script": "piwik_sites_refresh"}, false, true, false);
 }
 
 function piwik_customdimensions_clone() {
@@ -811,19 +821,19 @@ function sheetRecreation(silent, firstRun) {
 }
 
 /**
- * checks if the sheet has been set up correctly and shows an Alert and logs a console error if not
+ * Checks if the sheet has been set up correctly and shows an Alert and logs a console error if not
  * @returns {boolean}
  */
 function hasSetupFinishedAlert(alertIfNot) {
     var finished = hasSetupFinished();
     var gsheets_id = SpreadsheetApp.getActiveSpreadsheet().getId();
     if (!finished) {
-        console.error("setup_status in sheet " + gsheets_id + " is not complete yet, so not triggering server");
+        console.error("Piwik Pro Manager setup_status in sheet " + gsheets_id + " is not complete yet, so not triggering server");
         if (alertIfNot) {
             var ui = SpreadsheetApp.getUi();
             ui.alert("Sheet setup is not complete yet, please run 'Extensions -> Piwik Pro Manager -> Setup' first to configure " +
                 "sheet & API access. \nStill running into trouble? Write to lukas.oldenburg@dim28.ch or " +
-                "set up a free call with our support: https://meet.boomerangapp.com/lukas.oldenburg.dim28.ch/meeting");
+                "set up a free call at: https://meet.boomerangapp.com/lukas.oldenburg.dim28.ch/meeting");
         }
     }
     return finished;
@@ -833,13 +843,13 @@ function hasSetupFinishedAlert(alertIfNot) {
  * checks if the sheet has been set up correctly. Usually called by hasSetupFinishedAlert (wrapper)
  * @returns {boolean}
  */
-function hasSetupFinished() { // TODO
+function hasSetupFinished() {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
     var sheets = ss.getSheets();
     var config_sheet_exists = false;
     for (let i = 0; i < sheets.length; i++) {
-        if (sheets[i].getName() === "config") {
+        if (sheets[i].getName() === "Config") {
             config_sheet_exists = true;
             break;
         }
@@ -850,12 +860,6 @@ function hasSetupFinished() { // TODO
     var setup_status = getConfigSettings("setup_status");
     if (setup_status) {
         return setup_status === "success";
-    }
-    // for older sheets without setup_status key:
-    var company = ss.getRangeByName("company").getValue();
-    if (!company || // no company ID
-        (company.length === 24 && company.search(/[A-Z]/) !== -1)) { // indicates a preliminary ID (first part of Adobe Org ID)
-        return false;
     }
     return true;
 }
@@ -1094,7 +1098,6 @@ function guidedSetup() {
     }
 
     // 30 Secret
-    var secret_key = 'piwik_client_secret';
     var secret_msg = "\n(not exposed in sheet for security reasonns)";
     var secret = null;
     var response3 = ui.prompt('Confirm (leave blank) or change your "Client Secret"', secret_msg, ui.ButtonSet.OK_CANCEL);
@@ -1121,7 +1124,7 @@ function guidedSetup() {
     spreadsheet.toast('We are now initializing your account. \n' +
         'You can change the config anytime by re-running the setup. Once done, you\'ll  receive another message here', "Thank you!", -20);
 
-    var response = trigger_server(payload, true); // force sync response
+    var response = trigger_server(payload, true, false, false); // force sync response
     console.log('response:', response);
     // the first element in the log array is the function response dict, e.g. {"result": "done", "message": "Setup successful"}
     // the second element is usually the status code, e.g. 200
@@ -1284,6 +1287,50 @@ function updateConfigSettingsValue(config_key, value) {
 
     return true;
 }
+
+/**
+ * Checks if at least one Site is selected in the Sites tab under "Generate data for these sites"
+ * and alerts the user if not (or if the Sites tab is broken). Returns true if at least one site is selected.
+ * @param {boolean} [alertIfNot=true] - will show an alert if no sites are selected
+ * @return {boolean}
+ */
+function areSitesSelected(alertIfNot) {
+    const sheetName = "Sites!";
+    const headerRow = 4;
+    const targetHeader = "Generate data for these sites";
+
+    // Get the active spreadsheet and the target sheet
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+
+    // Get the header row data
+    const headers = sheet.getRange(headerRow, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+    // Find the column index for the target header
+    const targetColumnIndex = headers.indexOf(targetHeader) + 1;
+    if (targetColumnIndex === 0) {
+        let msg = "Column with header " + targetHeader + " not found in 'Sites' tab row " + headerRow.toString() + ". " +
+            "'Sites' tab may have been broken. Recreate it via Other -> 'Recreate this tab' or recreate entire sheet via " +
+            "'Other' -> 'Recreate Sheet'.";
+        // in this extreme case we always want to alert the user
+        var ui = SpreadsheetApp.getUi();
+        ui.alert(msg);
+        return false;
+    }
+
+    // Get all values in the target column starting from row 5
+    const data = sheet.getRange(headerRow + 1, targetColumnIndex, sheet.getLastRow() - headerRow).getValues();
+
+    // Check if any value is TRUE
+    if (data.some(row => row[0] === true) === true) {
+        return true;
+    }
+    if (alertIfNot) {
+        var ui = SpreadsheetApp.getUi();
+        ui.alert("No sites selected. Please select at least one site in the 'Sites' tab.");
+    }
+    return false;
+}
+
 
 function removeFiltersFromSheet(sheetname) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
