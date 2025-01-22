@@ -10,7 +10,7 @@
 7. Reload the Google Sheets tab (not the Apps Script Editor).
 8. Under "Extensions", you should now see "Piwik Pro Manager". 
 9. Run "Setup" and follow the steps there.
-![img.png](img.png)
+![img.png](piwik-pro-manager-extension-screenshot.png)
 
 ## Piwik Pro Credentials needed
 
