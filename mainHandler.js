@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-01-17-1";
+var version = "2025-01-25-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -142,16 +142,16 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Refresh Tags & TagDetails', fn: 'piwik_tags_refresh_with_details'},
                 {m_type: 'fn', label: 'Edit/Delete Tags', fn: 'piwik_tags_edit'},
                 {m_type: 'fn', label: 'Sync Tags', fn: 'piwik_tags_sync'},
-                {m_type: 'fn', label: 'Edit and Sync Tags', fn: 'piwik_tags_edit_and_sync'}, // Missing function added
+                {m_type: 'fn', label: 'Edit and Sync Tags', fn: 'piwik_tags_edit_and_sync'},
                 {m_type: 'fn', label: 'Copy Tags', fn: 'piwik_tags_copy'}
             ]
         },
         {
-            m_type: 'sub', label: 'Tag Details', sub: [  // Added missing sub-menu for TagDetails
+            m_type: 'sub', label: 'Tag Details', sub: [
                 {m_type: 'fn', label: 'Refresh Tags & TagDetails', fn: 'piwik_tags_refresh_with_details'},
-                {m_type: 'fn', label: 'Edit/Delete TagDetails', fn: 'piwik_tagdetails_edit'},  // Missing function added
-                {m_type: 'fn', label: 'Sync TagDetails', fn: 'piwik_tagdetails_sync'},  // Missing function added
-                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_tagdetails_edit_and_sync'}  // Missing function added
+                {m_type: 'fn', label: 'Edit/Delete TagDetails', fn: 'piwik_tagdetails_edit'},
+                {m_type: 'fn', label: 'Sync TagDetails', fn: 'piwik_tagdetails_sync'},
+                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_tagdetails_edit_and_sync'}
             ]
         },
         {
@@ -187,6 +187,9 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Copy Goals', fn: 'piwik_goals_copy'}
             ]
         },
+        {m_type: 'separator'},
+        {m_type: 'fn', label: 'Clear Edit Column', fn: 'clearEditColumn'},
+        {m_type: 'separator'},
         {
             m_type: 'sub', label: 'Other', sub: [
                 {m_type: 'fn', label: 'Recreate Sheet', fn: 'sheetRecreation'},
@@ -1331,7 +1334,6 @@ function areSitesSelected(alertIfNot) {
     return false;
 }
 
-
 function removeFiltersFromSheet(sheetname) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var ssp = ss.getSheetByName(sheetname);
@@ -1342,4 +1344,30 @@ function removeFiltersFromSheet(sheetname) {
     }
 
     return true;
+}
+
+function clearEditColumn() {
+
+    var spreadsheet = SpreadsheetApp.getActive();
+    var activeSheet = spreadsheet.getActiveSheet();
+    var headerRow = 4; // ! header row could be changed in future!
+    var headerRowCells = activeSheet.getRange(headerRow, 1, 1, activeSheet.getLastColumn()).getValues()[0];
+    var editCol = -1;
+    for (let i = 0; i < headerRowCells.length; i++) {
+        // 'method' string could be changed in future!
+        if (headerRowCells[i].indexOf('EDIT') !== -1) {
+            editCol = i + 1;
+            break;
+        }
+    }
+    if (editCol === -1) {
+        throw Error("No EDIT column found. Make sure you are on a tab with an EDIT column.");
+    }
+    var lastRow = activeSheet.getLastRow();
+
+    // Clear the content of the "EDIT" or "EDIT/DELETE" column from the header row to the last row with content
+    activeSheet.getRange(headerRow + 1, editCol, lastRow - headerRow).clear({
+        contentsOnly: true,
+        skipFilteredRows: false
+    });
 }
