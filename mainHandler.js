@@ -7,7 +7,6 @@ var spreadsheet = SpreadsheetApp.getActive();
 var gsheets_id = spreadsheet.getId();
 var piwik_org_prefix = "";
 var piwik_client_id = "";
-var piwik_client_secret = "";
 try {
     piwik_org_prefix = getConfigSettings('piwik_org_prefix');
     piwik_client_id = getConfigSettings('piwik_client_id');
