@@ -1372,7 +1372,7 @@ function clearEditColumn() {
     var editCol = -1;
     for (let i = 0; i < headerRowCells.length; i++) {
         // 'method' string could be changed in future!
-        if (headerRowCells[i].indexOf('EDIT') !== -1) {
+        if (headerRowCells[i].search(/EDIT|DELETE/) !== -1) {
             editCol = i + 1;
             break;
         }
