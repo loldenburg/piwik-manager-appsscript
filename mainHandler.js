@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-01-25-1";
+var version = "2025-01-26-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -160,7 +160,8 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Refresh Variables with Usage Info', fn: 'piwik_variables_refresh_with_usage'},
                 {m_type: 'fn', label: 'Edit/Delete Variables', fn: 'piwik_variables_edit'},
                 {m_type: 'fn', label: 'Copy Variables', fn: 'piwik_variables_copy'},
-                {m_type: 'fn', label: 'Sync Variables', fn: 'piwik_variables_sync'}
+                {m_type: 'fn', label: 'Sync Variables', fn: 'piwik_variables_sync'},
+                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_variables_edit_and_sync'}
             ]
         },
         {
@@ -359,7 +360,8 @@ function piwik_tagdetails_edit_and_sync() {
     activateTab(sheetName);
 
     var ui = SpreadsheetApp.getUi();
-    var response = ui.alert("Confirm", "This will edit or delete the TagDetails marked with 'edit' or 'delete' in the 'EDIT/DELETE' column, and then sync the updates in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
+    var response = ui.alert("Confirm", "This will edit or delete the TagDetails marked with 'edit' or 'delete' in " +
+        "the 'EDIT/DELETE' column, and then sync the updates to the Sites in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
     if (response === ui.Button.CANCEL) {
         return;  // Exit if the user cancels
     }
@@ -506,6 +508,22 @@ function piwik_variables_sync() {
     var msg = "Syncing Variables. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_variables_sync"});
+}
+
+function piwik_variables_edit_and_sync() {
+    var sheetName = "Variables";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will edit or delete the Variables marked with 'edit' or 'delete' in " +
+        "the 'EDIT/DELETE' column, and then sync the updates to the Sites in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Editing and Syncing Variables. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_variables_edit_and_sync"});
 }
 
 function piwik_triggers_refresh() {
