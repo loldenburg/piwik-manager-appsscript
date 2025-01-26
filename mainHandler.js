@@ -160,7 +160,7 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Edit/Delete Variables', fn: 'piwik_variables_edit'},
                 {m_type: 'fn', label: 'Copy Variables', fn: 'piwik_variables_copy'},
                 {m_type: 'fn', label: 'Sync Variables', fn: 'piwik_variables_sync'},
-                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_variables_edit_and_sync'}
+                {m_type: 'fn', label: 'Edit and Sync Variables', fn: 'piwik_variables_edit_and_sync'}
             ]
         },
         {
