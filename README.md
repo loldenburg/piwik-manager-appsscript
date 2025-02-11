@@ -34,9 +34,7 @@ You need:
 
 ## Managing Custom Dimensions in Piwik Pro Manager
 
-* Video Guide for all important Custom Dimensions Functions: 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=f7V4xBN4X00" frameborder="0" allowfullscreen></iframe>
-  ([Click here if you don't see the preview](https://www.youtube.com/watch?v=f7V4xBN4X00))
+* Video Guide for all important Custom Dimensions Functions: https://www.youtube.com/watch?v=f7V4xBN4X00
 * Medium Article "Bulk-Edit & Sync Piwik Pro Custom Dimensions in multiple Sites": https://thebounce.io/bulk-edit-sync-piwik-pro-custom-dimensions-in-multiple-sites-9786d148b1ed
 
 Having the same Custom Dimension Slots and IDs across Sites is the most crucial foundation for scalability!
