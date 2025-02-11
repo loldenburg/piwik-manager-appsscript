@@ -4,7 +4,8 @@ Piwik Pro Manager saves time, minimizes redundancy and fosters transparency for 
 ## Quick Start Guide
 
 ### Video Guide
-[![Video Title](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/yXKHIK-s_QI)
+
+[![Getting Started with Piwik Pro Manager - Video](youtube-thumbnail.png)](https://youtu.be/yXKHIK-s_QI)
 
 ### Text Guide
 1. In any Google Sheet owned by you, go to File -> Settings and ensure that the Locale is set to "United States".
