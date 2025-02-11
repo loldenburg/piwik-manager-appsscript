@@ -1,15 +1,16 @@
 # Piwik Pro Manager
 
 ## Quick Start Guide
-1. In any Google Sheet owned by you, go to **Extensions -> Apps Script**
-2. An Apps Script editor window will open.
-3. Copy the code from https://github.com/loldenburg/piwik-manager-appsscript/blob/e03ce406de548d0a6c3bee14aa60ec5245aad45b/mainHandler.js
-4. Paste the code into the Apps Script editor window.
-5. Give the Apps Script a proper name (= this will be the name in your Google Sheets menu), e.g., "Piwik Pro Manager {My Org}" 
-6. Save (e.g. via the "Save" icon).
-7. Reload the Google Sheets tab (not the Apps Script Editor).
-8. Under "Extensions", you should now see "Piwik Pro Manager". 
-9. Run "Setup" and follow the steps there.
+1. In any Google Sheet owned by you, go to File -> Settings and ensure that the Locale is set to "United States".
+2. Go to **Extensions -> Apps Script**
+3. An Apps Script editor window will open.
+4. Copy the code from https://github.com/loldenburg/piwik-manager-appsscript/blob/e03ce406de548d0a6c3bee14aa60ec5245aad45b/mainHandler.js
+5. Paste the code into the Apps Script editor window.
+6. Give the Apps Script a proper name (= this will be the name in your Google Sheets menu), e.g., "Piwik Pro Manager {My Org}" 
+7. Save (e.g. via the "Save" icon).
+8. Reload the Google Sheets tab (not the Apps Script Editor).
+9. Under "Extensions", you should now see "Piwik Pro Manager". 
+10. Run "Setup" and follow the steps there.
 ![img.png](piwik-pro-manager-extension-screenshot.png)
 
 ## Piwik Pro Credentials needed
