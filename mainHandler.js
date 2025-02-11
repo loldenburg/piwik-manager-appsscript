@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-01-26-1";
+var version = "2025-02-11-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -150,7 +150,8 @@ function getMenuObj() {
                 {m_type: 'fn', label: 'Refresh Tags & TagDetails', fn: 'piwik_tags_refresh_with_details'},
                 {m_type: 'fn', label: 'Edit/Delete TagDetails', fn: 'piwik_tagdetails_edit'},
                 {m_type: 'fn', label: 'Sync TagDetails', fn: 'piwik_tagdetails_sync'},
-                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_tagdetails_edit_and_sync'}
+                {m_type: 'fn', label: 'Edit and Sync TagDetails', fn: 'piwik_tagdetails_edit_and_sync'},
+                {m_type: 'fn', label: 'Order Custom Dimensions', fn: 'piwik_tagdetails_order_customdimensions'}
             ]
         },
         {
@@ -368,6 +369,22 @@ function piwik_tagdetails_edit_and_sync() {
     var msg = "Editing and Syncing Tag Details. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tagdetails_edit_and_sync"});
+}
+
+piwik_tagdetails_order_customdimensions = function () {
+    var sheetName = "TagDetails";
+    activateTab(sheetName);
+
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will order the Custom Dimensions in all Piwik Pro Analytics Tags on the TagDetails tab based on the " +
+        "Custom Dimension ID. Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response === ui.Button.CANCEL) {
+        return;  // Exit if the user cancels
+    }
+
+    var msg = "Ordering Custom Dimensions. Please wait.";
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_tagdetails_order_customdimensions"});
 }
 
 function piwik_customdimensions_refresh() {
