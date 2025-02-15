@@ -1,20 +1,20 @@
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [What is Piwik Pro Manager?](#what-is-piwik-pro-manager)
-      + [Some Features](#some-features)
-   * [Quick Start Guide](#quick-start-guide)
-      + [Video Guide](#video-guide)
-      + [Text Guide](#text-guide)
-   * [Which Piwik Pro Credentials do I need?](#which-piwik-pro-credentials-do-i-need)
-   * [Managing Custom Dimensions in Piwik Pro Manager](#managing-custom-dimensions-in-piwik-pro-manager)
-      + [Clone Custom Dimensions](#clone-custom-dimensions)
-      + [Bulk-Edit Custom Dimensions](#bulk-edit-custom-dimensions)
-      + [Sync Custom Dimension edits in a Blueprint Site to multiple Destination Sites](#sync-custom-dimension-edits-in-a-blueprint-site-to-multiple-destination-sites)
-      + [Order Custom Dimensions in Tags in Piwik Pro Tag Manager by their ID](#order-custom-dimensions-in-tags-in-piwik-pro-tag-manager-by-their-id)
-   * [Piwik Pro Manager vs. Piwik Pro Meta Sites](#piwik-pro-manager-vs-piwik-pro-meta-sites)
-      + [Meta Sites in Tag Manager](#meta-sites-in-tag-manager)
-      + [Meta Sites in Analytics](#meta-sites-in-analytics)
-   * [About](#about)
+   * [Some Features](#some-features)
+- [Quick Start Guide](#quick-start-guide)
+   * [Video Guide](#video-guide)
+   * [Text Guide](#text-guide)
+- [Which Piwik Pro Credentials do I need?](#which-piwik-pro-credentials-do-i-need)
+- [Managing Custom Dimensions in Piwik Pro Manager](#managing-custom-dimensions-in-piwik-pro-manager)
+- [Clone Custom Dimensions](#clone-custom-dimensions)
+   * [Bulk-Edit Custom Dimensions](#bulk-edit-custom-dimensions)
+   * [Sync Custom Dimension edits in a Blueprint Site to multiple Destination Sites](#sync-custom-dimension-edits-in-a-blueprint-site-to-multiple-destination-sites)
+   * [Order Custom Dimensions in Tags in Piwik Pro Tag Manager by their ID](#order-custom-dimensions-in-tags-in-piwik-pro-tag-manager-by-their-id)
+- [Piwik Pro Manager vs. Piwik Pro Meta Sites](#piwik-pro-manager-vs-piwik-pro-meta-sites)
+   * [Meta Sites in Tag Manager](#meta-sites-in-tag-manager)
+   * [Meta Sites in Analytics](#meta-sites-in-analytics)
+- [About](#about)
 
 <!-- TOC end -->
 
@@ -40,7 +40,7 @@ Component Types supported by PP Manager:
 * Custom Dimensions and Goals
 
 <!-- TOC --><a name="some-features"></a>
-### Some Features
+## Some Features
 * All your PP Sites in one, searchable & filterable place: Which tags require Conversion Tracking Consent again?
 * Bulk-edit and sync Tag Manager changes to multiple Sites: No need to replicate changes in each Site anymore! Simply change component in 1 template Site and then synch to other Sites with 2 clicks
 * Locate and bulk-delete duplicate or unused Triggers & Variables 
@@ -53,15 +53,15 @@ Component Types supported by PP Manager:
 Getting started takes just 5 minutes. Check out the Quick Start Guide below and become a Admin Pro in Piwik Pro!
 
 <!-- TOC --><a name="quick-start-guide"></a>
-## Quick Start Guide
+# Quick Start Guide
 
 <!-- TOC --><a name="video-guide"></a>
-### Video Guide
+## Video Guide
 
 [![Getting Started with Piwik Pro Manager - Video](youtube-thumbnail.png)](https://youtu.be/yXKHIK-s_QI)
 
 <!-- TOC --><a name="text-guide"></a>
-### Text Guide
+## Text Guide
 
 1. In any Google Sheet owned by you, go to File -> Settings and ensure that the Locale is set to "United States".
 2. Go to **Extensions -> Apps Script**
@@ -86,7 +86,7 @@ Keep in mind that the more Sites you select, the longer it will take to refresh 
     elements from the Sites you have selected in the previous step.
 
 <!-- TOC --><a name="which-piwik-pro-credentials-do-i-need"></a>
-## Which Piwik Pro Credentials do I need?
+# Which Piwik Pro Credentials do I need?
 
 You need:
 
@@ -96,7 +96,7 @@ You need:
   mycompany"
 
 <!-- TOC --><a name="managing-custom-dimensions-in-piwik-pro-manager"></a>
-## Managing Custom Dimensions in Piwik Pro Manager
+# Managing Custom Dimensions in Piwik Pro Manager
 
 * Video Guide for all important Custom Dimensions Functions: https://www.youtube.com/watch?v=f7V4xBN4X00
 * Medium Article "Bulk-Edit & Sync Piwik Pro Custom Dimensions in multiple
@@ -110,7 +110,7 @@ Piwik Pro Sites anymore.
 Specifically, these topics are covered:
 
 <!-- TOC --><a name="clone-custom-dimensions"></a>
-### Clone Custom Dimensions
+# Clone Custom Dimensions
 
 Clones Custom Dimensions from a Blueprint Site to multiple Destination Sites.
 
@@ -123,7 +123,7 @@ It is also useful after creating new Custom Dimension(s). You just create them i
 Clone Custom Dimensions" to replicate them in any other Sites you have selected in the "Sites" tab.
 
 <!-- TOC --><a name="bulk-edit-custom-dimensions"></a>
-### Bulk-Edit Custom Dimensions
+## Bulk-Edit Custom Dimensions
 
 Edits one or more Custom Dimensions marked with "edit" in the "EDIT" column on the "CustomDimensions" tab.
 
@@ -132,7 +132,7 @@ Menu: **Custom Dimensions -> Edit Custom Dimensions**
 Editable columns are yellow. To edit, just start typing in the fields you want to edit.
 
 <!-- TOC --><a name="sync-custom-dimension-edits-in-a-blueprint-site-to-multiple-destination-sites"></a>
-### Sync Custom Dimension edits in a Blueprint Site to multiple Destination Sites
+## Sync Custom Dimension edits in a Blueprint Site to multiple Destination Sites
 
 The powerful "Sync" function makes sure you never need to edit the same thing in multiple Sites anymore.
 
@@ -147,7 +147,7 @@ Sites. So you simply edit the Custom Dimension(s) in your "Blueprint" Site, then
 SYNC IN" column, and then run the Sync.
 
 <!-- TOC --><a name="order-custom-dimensions-in-tags-in-piwik-pro-tag-manager-by-their-id"></a>
-### Order Custom Dimensions in Tags in Piwik Pro Tag Manager by their ID
+## Order Custom Dimensions in Tags in Piwik Pro Tag Manager by their ID
 
 In Piwik Tag Manager, you cannot drag Custom Dimensions up or down. So if you messed up the order, this function comes
 to the rescue.
@@ -170,7 +170,7 @@ After running "Order Custom Dimensions", they are nicely ordered by their ID:
 ![img.png](custom-dimensions-ordered.png)
 
 <!-- TOC --><a name="piwik-pro-manager-vs-piwik-pro-meta-sites"></a>
-## Piwik Pro Manager vs. Piwik Pro Meta Sites
+# Piwik Pro Manager vs. Piwik Pro Meta Sites
 
 Piwik Pro offers "Meta Sites" as a concept to help with multi-Site setups. While these Meta Sites have some helpful
 features, they also come with some challenges. I summarized
@@ -180,7 +180,7 @@ Using Piwik Pro Manager **does not conflict with using Meta Sites**, but in your
 understand the differences:
 
 <!-- TOC --><a name="meta-sites-in-tag-manager"></a>
-### Meta Sites in Tag Manager
+## Meta Sites in Tag Manager
 
 Meta Sites in Tag Manager exist to centrally manage and deploy elements that should fire on all "Sub"-Sites. You edit
 some Tags and Variables in a Meta site, and that then gets invisibly triggered in all Sub-Sites. While this can be
@@ -222,13 +222,13 @@ _**How Piwik Pro Manager handles this:** No such challenges exist, as you are al
 
 
 <!-- TOC --><a name="meta-sites-in-analytics"></a>
-### Meta Sites in Analytics
+## Meta Sites in Analytics
 
 Analytics Meta Sites (aka "Rollup Properties") exist to aggregate data from multiple Sub-Sites in one Analytics report
 interface. Piwik Pro Manager is not focused on reporting, so there is no similar feature in Piwik Pro Manager.
 
 <!-- TOC --><a name="about"></a>
-## About
+# About
 
 Piwik Pro Manager was built and is maintained by Lukas Oldenburg from dim28, an independent Analytics consultant with no
 liaison to the company Piwik Pro.
