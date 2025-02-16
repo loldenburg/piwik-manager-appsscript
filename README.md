@@ -1,9 +1,12 @@
+_**[---> Skip to the Quick Start Guide](#quick-start-guide)**_ 
+
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [What is Piwik Pro Manager?](#what-is-piwik-pro-manager)
    * [YouTube Video](#youtube-video)
    * [Overview of Main Features](#overview-of-main-features)
-   * [Some Features](#some-features)
+      + [Component Types supported by PP Manager:](#component-types-supported-by-pp-manager)
+      + [Some Features](#some-features)
 - [Quick Start Guide](#quick-start-guide)
    * [Video Guide](#video-guide)
    * [Text Guide](#text-guide)
@@ -44,18 +47,19 @@ again and again in all the other Sites.
 ![img.png](153-variable-changes.png)
 _(Updating 153 variables - a matter of a few clicks)_
 
-Component Types supported by PP Manager:
+<!-- TOC --><a name="component-types-supported-by-pp-manager"></a>
+### Component Types supported by PP Manager:
 
 * Sites, Tag Manager (TM) Tags, Triggers, Variables
 * Custom Dimensions and Goals
 
 
 <!-- TOC --><a name="some-features"></a>
-## Some Features
+### Some Features
 
-* All your PP Sites in one, searchable & filterable place: Which tags require Conversion Tracking Consent again?
+* All your PP Sites in one, searchable & filtrable place: Which tags require Conversion Tracking Consent again?
 * Bulk-edit and sync Tag Manager changes to multiple Sites: No need to replicate changes in each Site anymore! Simply
-  change component in 1 template Site and then synch to other Sites with 2 clicks
+  change component in 1 template Site and then synch to other Sites
 * Locate and bulk-delete duplicate or unused Triggers & Variables
 * And more stuff:
     * Bulk-clone and bulk-edit Custom Dimensions across multiple sites
@@ -63,7 +67,7 @@ Component Types supported by PP Manager:
     * Bulk-copy, sync and delete Goals
 * All changes are transparently logged!
 
-Getting started takes just 5 minutes. Check out the Quick Start Guide below and become a Admin Pro in Piwik Pro!
+**Getting started takes just 5 minutes.** Check out the Quick Start Guide below and become a Admin Pro in Piwik Pro!
 
 
 <!-- TOC --><a name="quick-start-guide"></a>
