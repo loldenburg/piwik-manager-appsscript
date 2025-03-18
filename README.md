@@ -303,8 +303,8 @@ Piwik Pro offers "Meta Sites" as a concept to help with multi-Site setups. While
 features, they also come with some challenges. I summarized
 them [in this article: "To Meta or not to Meta"](https://thebounce.io/piwik-pro-to-meta-or-not-to-meta-b434f85a81e1).
 
-Using Piwik Pro Manager **does not conflict with using Meta Sites**, but in your Tag Manager setup, but it helps to
-understand the differences:
+Using Piwik Pro Manager **does not conflict with using Meta Sites**, but it helps to
+understand the differences, especially in your Tag Manager setup:
 
 
 <!-- TOC --><a name="meta-sites-in-tag-manager"></a>
