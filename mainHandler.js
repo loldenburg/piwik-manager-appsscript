@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-02-11-1";
+var version = "2025-08-17-1";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -132,6 +132,7 @@ function getMenuObj() {
         {
             m_type: 'sub', label: 'Sites', sub: [
                 {m_type: 'fn', label: 'Refresh Sites', fn: 'piwik_sites_refresh'},
+                {m_type: 'fn', label: 'Publish Sites', fn: 'piwik_sites_publish'},
                 {m_type: 'fn', label: 'Clone Custom Dimensions', fn: 'piwik_customdimensions_clone'}
             ]
         },
@@ -217,6 +218,20 @@ function piwik_sites_refresh() {
     trigger_server({"script": "piwik_sites_refresh"}, false, true, false);
 }
 
+function piwik_sites_publish() {
+    var sheetName = "Sites";
+    activateTab(sheetName);
+    var ui = SpreadsheetApp.getUi();
+    var response = ui.alert("Confirm", "This will publish the latest draft in the Tag Manager Sites selected " +
+        "in the 'Publish Sites' column. Continue?", ui.ButtonSet.OK_CANCEL);
+    if (response !== ui.Button.OK) {
+        return;  // Exit if the user cancels
+    }
+    var msg = "Publishing Sites. Please wait. " + filter_warning;
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_sites_publish"});
+}
+
 function piwik_customdimensions_clone() {
     var sheetName = "Sites";
     activateTab(sheetName);
@@ -226,7 +241,7 @@ function piwik_customdimensions_clone() {
         "destination sites with the same 'Slot', 'Tracking ID', name & settings as " +
         " in the source site. \n\nThis will not do anything if a destination site already has differently configured Custom " +
         "Dimensions. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -262,7 +277,7 @@ function piwik_tags_edit() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Tags marked with 'edit' or 'delete' " +
         "in the 'EDIT/DELETE' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -279,7 +294,7 @@ function piwik_tags_sync() {
     var response = ui.alert("Confirm", "This will sync the Tags in the destination sites selected in " +
         "the 'SYNC IN' column. 'Synching' means Tags of the same name will be updated to the same definition as " +
         "in the source site. \n\nContinue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -295,7 +310,7 @@ function piwik_tags_edit_and_sync() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Tags marked with 'edit' or 'delete' in the " +
         "'EDIT/DELETE' column, and then sync the updates in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -313,7 +328,7 @@ function piwik_tags_copy() {
         "Copying will only be done if no tag of the same name exists in the destination sites. If you do NOT want to copy " +
         "triggers with the tag, change the dropdown in cell P2." +
         "\n\nContinue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -329,7 +344,7 @@ function piwik_tagdetails_edit() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Tag Details marked with 'edit' or " +
         "'delete' in the 'EDIT/DELETE' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -346,7 +361,7 @@ function piwik_tagdetails_sync() {
     var response = ui.alert("Confirm", "This will sync the TagDetails in the destination sites selected in " +
         "the 'SYNC IN' column. 'Synching' means TagDetails of the same name will be updated to the same definition as " +
         "in the source site. \n\nContinue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -362,7 +377,7 @@ function piwik_tagdetails_edit_and_sync() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the TagDetails marked with 'edit' or 'delete' in " +
         "the 'EDIT/DELETE' column, and then sync the updates to the Sites in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -378,7 +393,7 @@ piwik_tagdetails_order_customdimensions = function () {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will order the Custom Dimensions in all Piwik Pro Analytics Tags on the TagDetails tab based on the " +
         "Custom Dimension ID. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -404,7 +419,7 @@ function piwik_customdimensions_edit() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit the Custom Dimensions marked with 'edit' " +
         "in the 'EDIT' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -421,7 +436,7 @@ function piwik_customdimensions_sync() {
     var response = ui.alert("Confirm", "This will sync the Custom Dimensions in the destination sites selected " +
         "in the 'SYNC IN' column. 'Synching' means Custom Dimensions of the same Slot, ID and Scope will be updated to the same " +
         "definition as in the source site. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -438,7 +453,7 @@ function piwik_customdimensions_edit_and_sync() {
     var response = ui.alert("Confirm", "This will edit the Custom Dimensions marked with 'edit' in " +
         "the 'EDIT' column, and then sync the updates to the Sites marked in the 'SYNC IN' column. " +
         "\n\nContinue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -467,7 +482,7 @@ function piwik_variables_refresh_with_usage() {
         "the 'TagDetails' and 'Triggers' tabs. If those tabs are not up to date, refresh them first, " +
         "and then run this function again." +
         "\n\nContinue with Variables refresh incl. Usage data?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;
     }
     var msg = "Refreshing Variables with Usage stats based on the 'TagDetails' and 'Triggers' tabs. Please wait. " + filter_warning;
@@ -483,7 +498,7 @@ function piwik_variables_edit() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Variables marked with 'edit' or 'delete' " +
         "in the 'EDIT/DELETE' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -500,7 +515,7 @@ function piwik_variables_copy() {
     var response = ui.alert("Confirm", "This will copy the Variables to other sites selected in the 'COPY TO' " +
         "column. If a Variable of the same name already exists in the destination site, it won't be copied. " +
         "Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -517,7 +532,7 @@ function piwik_variables_sync() {
     var response = ui.alert("Confirm", "This will sync the Variables in the destination sites selected in " +
         "the 'SYNC IN' column. 'Synching' means Variables of the same name will be updated to the same definition " +
         "as in the source site. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -533,7 +548,7 @@ function piwik_variables_edit_and_sync() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Variables marked with 'edit' or 'delete' in " +
         "the 'EDIT/DELETE' column, and then sync the updates to the Sites in the 'SYNC IN' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -559,7 +574,7 @@ function piwik_triggers_edit() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will edit or delete the Triggers marked with 'edit' or 'delete' " +
         "in the 'EDIT/DELETE' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -576,7 +591,7 @@ function piwik_triggers_copy() {
     var response = ui.alert("Confirm", "This will copy the Triggers to other sites selected in the 'COPY TO'" +
         " column. If a Trigger of the same name already exists in the destination site, it won't be copied. " +
         "Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -602,7 +617,7 @@ function piwik_goals_delete() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will delete the Goals marked with 'delete' " +
         "in the 'DELETE' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -620,7 +635,7 @@ function piwik_goals_sync() {
     /*
     var response = ui.alert("Confirm", "This will delete the Goals marked with 'delete' in the 'DELETE' column. " +
         "Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -636,7 +651,7 @@ function piwik_goals_copy() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will create goals of the same name and definition in the sites " +
         "selected in the 'COPY TO' column. Continue?", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
 
@@ -652,7 +667,7 @@ function piwik_refresh_all_tabs() {
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("This will refresh/populate all Tabs and remove the filters on all tabs. This can take a while. \n\n" +
         "Continue? ", ui.ButtonSet.OK_CANCEL);
-    if (response === ui.Button.CANCEL) {
+    if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
     show_update_running_msg("Refreshing all Tabs. Please wait...", "Status", 30);
@@ -1073,7 +1088,7 @@ function guidedSetup() {
             console.log('user accepted, go next and write acceptance date to config sheet');
             terms_and_users_arr[userInd].a = new Date((new Date()).getTime()).toISOString();
             updateConfigSettingsValue(config_param_name, JSON.stringify(terms_and_users_arr));
-        } else if (response0 === ui.Button.CANCEL) {
+        } else if (response0 !== ui.Button.OK) {
             console.log('cancelled');
             return false;
         } else return false;
