@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2025-08-25-1";
+var version = "2025-08-25-2";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -221,7 +221,20 @@ function piwik_sites_refresh() {
 
 function piwik_sitedetails_refresh() {
     var sheetName = "SiteDetails";
-    activateTab(sheetName);
+    // if tab "SiteDetails" does not exist, create it via import from Master Sheet
+    // -> Create empty "SiteDetails" tab, then run "Recreate Tab" function
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+        var msg = "SiteDetails tab does not exist yet. Creating it first...";
+        show_update_running_msg(msg, "Status", 10);
+        ss.insertSheet(sheetName);
+        Utilities.sleep(1500);
+        activateTab(sheetName);
+        recreateThisTab();
+    } else {
+        activateTab(sheetName);
+    }
 
     var msg = "Refreshing Site Details. Please wait. " + filter_warning;
     show_update_running_msg(msg, "Status", 10);
