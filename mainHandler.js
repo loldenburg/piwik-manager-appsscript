@@ -132,7 +132,8 @@ function getMenuObj() {
         {
             m_type: 'sub', label: 'Sites', sub: [
                 {m_type: 'fn', label: 'Refresh Sites', fn: 'piwik_sites_refresh'},
-                {m_type: 'fn', label: 'Publish Sites', fn: 'piwik_sites_publish'},
+                {m_type: 'fn', label: 'Publish Tag Manager Sites', fn: 'piwik_sites_publish'},
+                {m_type: 'fn', label: 'Refresh Site Details', fn: 'piwik_sitedetails_refresh'},
                 {m_type: 'fn', label: 'Clone Custom Dimensions', fn: 'piwik_customdimensions_clone'}
             ]
         },
@@ -216,6 +217,15 @@ function piwik_sites_refresh() {
     var msg = "Refreshing Sites. Please wait. " + filter_warning;
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_sites_refresh"}, false, true, false);
+}
+
+function piwik_sitedetails_refresh() {
+    var sheetName = "SiteDetails";
+    activateTab(sheetName);
+
+    var msg = "Refreshing Site Details. Please wait. " + filter_warning;
+    show_update_running_msg(msg, "Status", 10);
+    trigger_server({"script": "piwik_sitedetails_refresh"}, false, true, false);
 }
 
 function piwik_sites_publish() {
