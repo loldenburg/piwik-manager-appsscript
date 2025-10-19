@@ -147,7 +147,7 @@ You need:
 * Likewise, **changes in Piwik Pro Analytics or TM will not automatically show up in Piwik Pro Manager**. You have to
   run "Refresh" (or "Other -> Populate all Tabs" first).
 * **Don't worry about accidentally doing Tag Manager changes you didn't want.** Piwik Pro Manager does not directly
-  publish anything. You can always revert the changes in Tag Manager.
+  publish anything, unless you explicitly activate `publish_after_sync` and `publish_after_edit` in the "Config Settings" (see below). You can always revert the changes in Tag Manager.
 * **The "Sites" tab is all-important**.
     * Check the boxes for the Sites for which you want to
       view elements in Piwik Pro Manager. For example, if you select Site A and Site B, the other tabs (Tags etc.) will
