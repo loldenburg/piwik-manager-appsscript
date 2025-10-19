@@ -318,6 +318,7 @@ In the "Config" tab, you can use the following settings to change the way Piwik 
   in "Sites" tab after a "Sync" operation
 * `publish_after_edit`:    Default: "FALSE". If "TRUE", Piwik Pro Manager publishes Sites marked with "Publish Sites"
   in "Sites" tab after an "Edit" operation (includes Edit & Sync)
+* `sites_to_ignore`: Default: empty. A comma-separated list of Site IDs that you do not want to list in the "Sites" tab (e.g., "siteid1,siteid2"). Makes the drop-down menus for editing less crowded. A common use case is to ignore the "Demo Site" or some Sites that are no longer in use. 
 
 
 <!-- TOC --><a name="piwik-pro-manager-vs-piwik-pro-meta-sites"></a>
