@@ -49,7 +49,8 @@ I helps achieving a scalable, centralized Tracking standard without duplicating 
 
 _[[Video on YouTube](https://www.youtube.com/watch?v=_satTYIQmDg)]_
 
-
+Also check out Lukas's presentation on Piwik Pro Manager at Piwik Pro Day 2025:
+https://www.youtube.com/watch?v=SVgIin_w5Jo&list=PLgjjMVHirGE8L9fDIl6I0dJxvVoVx11f-
 
 <!-- TOC --><a name="overview-of-main-features"></a>
 ## Overview of Main Features
