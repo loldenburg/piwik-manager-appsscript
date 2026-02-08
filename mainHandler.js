@@ -975,7 +975,7 @@ function customOnEdit(event) {
         "TagDetails": "Z",
         "Variables": "W",
         "Triggers": "T",
-        "CustomDimensions": "M"
+        "CustomDimensions": "N"
     };
     var firstDataRow = 5;
     var editable_colsMap = {
