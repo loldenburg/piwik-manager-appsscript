@@ -1434,9 +1434,13 @@ function clearCopyColumn() {
 }
 
 function clearAllOperationsColumns() {
-    clearOperationColumn(/EDIT|DELETE/, "EDIT", true);
-    clearOperationColumn(/^SYNC/, "SYNC", true);
-    clearOperationColumn(/^COPY/, "COPY", true);
+    var cleared = 0;
+    cleared += clearOperationColumn(/EDIT|DELETE/, "EDIT", true);
+    cleared += clearOperationColumn(/^SYNC/, "SYNC", true);
+    cleared += clearOperationColumn(/^COPY/, "COPY", true);
+    if (cleared === 0) {
+        show_update_running_msg("No operations columns found on this tab.", "Error", 5);
+    }
 }
 
 /**
@@ -1460,12 +1464,16 @@ function clearOperationColumn(headerPattern, columnLabel, silent) {
         if (!silent) {
             show_update_running_msg("No " + columnLabel + " column found on this tab.", "Error", 5);
         }
-        return;
+        return 0;
     }
     var lastRow = activeSheet.getLastRow();
+    if (lastRow <= headerRow) {
+        return 1; // column exists but no data rows to clear
+    }
 
     activeSheet.getRange(headerRow + 1, col, lastRow - headerRow).clear({
         contentsOnly: true,
         skipFilteredRows: false
     });
+    return 1;
 }
