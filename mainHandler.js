@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2026-02-08-1";
+var version = "2026-02-09";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -192,6 +192,9 @@ function getMenuObj() {
         },
         {m_type: 'separator'},
         {m_type: 'fn', label: 'Clear Edit Column', fn: 'clearEditColumn'},
+        {m_type: 'fn', label: 'Clear Sync Column', fn: 'clearSyncColumn'},
+        {m_type: 'fn', label: 'Clear Copy Column', fn: 'clearCopyColumn'},
+        {m_type: 'fn', label: 'Clear All Operations Columns', fn: 'clearAllOperationsColumns'},
         {m_type: 'separator'},
         {
             m_type: 'sub', label: 'Other', sub: [
@@ -1419,26 +1422,49 @@ function removeFiltersFromSheet(sheetname) {
 }
 
 function clearEditColumn() {
+    clearOperationColumn(/EDIT|DELETE/, "EDIT");
+}
 
+function clearSyncColumn() {
+    clearOperationColumn(/^SYNC/, "SYNC");
+}
+
+function clearCopyColumn() {
+    clearOperationColumn(/^COPY/, "COPY");
+}
+
+function clearAllOperationsColumns() {
+    clearOperationColumn(/EDIT|DELETE/, "EDIT", true);
+    clearOperationColumn(/^SYNC/, "SYNC", true);
+    clearOperationColumn(/^COPY/, "COPY", true);
+}
+
+/**
+ * Clears a column matching the given header pattern on the active sheet.
+ * @param {RegExp} headerPattern - regex to match the header cell
+ * @param {string} columnLabel - label for error messages
+ */
+function clearOperationColumn(headerPattern, columnLabel, silent) {
     var spreadsheet = SpreadsheetApp.getActive();
     var activeSheet = spreadsheet.getActiveSheet();
     var headerRow = 4; // ! header row could be changed in future!
     var headerRowCells = activeSheet.getRange(headerRow, 1, 1, activeSheet.getLastColumn()).getValues()[0];
-    var editCol = -1;
+    var col = -1;
     for (let i = 0; i < headerRowCells.length; i++) {
-        // 'method' string could be changed in future!
-        if (headerRowCells[i].search(/EDIT|DELETE/) !== -1) {
-            editCol = i + 1;
+        if (headerRowCells[i].toString().search(headerPattern) !== -1) {
+            col = i + 1;
             break;
         }
     }
-    if (editCol === -1) {
-        throw Error("No EDIT column found. Make sure you are on a tab with an EDIT column.");
+    if (col === -1) {
+        if (!silent) {
+            show_update_running_msg("No " + columnLabel + " column found on this tab.", "Error", 5);
+        }
+        return;
     }
     var lastRow = activeSheet.getLastRow();
 
-    // Clear the content of the "EDIT" or "EDIT/DELETE" column from the header row to the last row with content
-    activeSheet.getRange(headerRow + 1, editCol, lastRow - headerRow).clear({
+    activeSheet.getRange(headerRow + 1, col, lastRow - headerRow).clear({
         contentsOnly: true,
         skipFilteredRows: false
     });
