@@ -1,6 +1,6 @@
 // Piwik Pro Manager, by dim28.ch, Lukas Oldenburg.
 // Description: Main handler for the (future) Piwik Pro Manager Google Sheets Add-on.
-var version = "2026-02-09-2";
+var version = "2026-02-10";
 
 var filter_warning = "Filters will be removed as they may not match the data range anymore after update.";
 var spreadsheet = SpreadsheetApp.getActive();
@@ -274,6 +274,7 @@ function piwik_customdimensions_clone() {
     var msg = "Cloning Custom Dimensions. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_customdimensions_clone"});
+    removeFiltersFromSheet("CustomDimensions");
 }
 
 function piwik_tags_refresh() {
@@ -310,6 +311,7 @@ function piwik_tags_edit() {
     var msg = "Editing Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tags_edit"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_tags_sync() {
@@ -343,6 +345,7 @@ function piwik_tags_edit_and_sync() {
     var msg = "Editing and Syncing Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tags_edit_and_sync"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_tags_copy() {
@@ -361,6 +364,7 @@ function piwik_tags_copy() {
     var msg = "Copying Tags. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tags_copy"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_tagdetails_edit() {
@@ -377,6 +381,7 @@ function piwik_tagdetails_edit() {
     var msg = "Editing Tag Details. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tagdetails_edit"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_tagdetails_sync() {
@@ -410,6 +415,7 @@ function piwik_tagdetails_edit_and_sync() {
     var msg = "Editing and Syncing Tag Details. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_tagdetails_edit_and_sync"});
+    removeFiltersFromSheet(sheetName);
 }
 
 piwik_tagdetails_order_customdimensions = function () {
@@ -418,7 +424,9 @@ piwik_tagdetails_order_customdimensions = function () {
 
     var ui = SpreadsheetApp.getUi();
     var response = ui.alert("Confirm", "This will order the Custom Dimensions in all Piwik Pro Analytics Tags on the TagDetails tab based on the " +
-        "Custom Dimension ID. Continue?", ui.ButtonSet.OK_CANCEL);
+        "Custom Dimension ID. \n\nIMPORTANT: This operation works on the data currently in the TagDetails tab. " +
+        "Make sure you have refreshed the TagDetails tab (via 'Refresh Tags & TagDetails') before running this, " +
+        "otherwise the ordering may be based on outdated data. \n\nContinue?", ui.ButtonSet.OK_CANCEL);
     if (response !== ui.Button.OK) {
         return;  // Exit if the user cancels
     }
@@ -531,6 +539,7 @@ function piwik_variables_edit() {
     var msg = "Editing Variables. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_variables_edit"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_variables_copy() {
@@ -548,6 +557,7 @@ function piwik_variables_copy() {
     var msg = "Copying Variables. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_variables_copy"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_variables_sync() {
@@ -581,6 +591,7 @@ function piwik_variables_edit_and_sync() {
     var msg = "Editing and Syncing Variables. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_variables_edit_and_sync"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_triggers_refresh() {
@@ -607,6 +618,7 @@ function piwik_triggers_edit() {
     var msg = "Editing Triggers. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_triggers_edit"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_triggers_copy() {
@@ -624,6 +636,7 @@ function piwik_triggers_copy() {
     var msg = "Copying Triggers. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_triggers_copy"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_goals_refresh() {
@@ -633,7 +646,7 @@ function piwik_goals_refresh() {
     var msg = "Refreshing Goals. Please wait. " + filter_warning;
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_goals_refresh"});
-    removeFiltersFromSheet("Tags");
+    removeFiltersFromSheet("Goals");
 }
 
 function piwik_goals_delete() {
@@ -650,6 +663,7 @@ function piwik_goals_delete() {
     var msg = "Deleting Goals. Please wait.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_goals_delete"});
+    removeFiltersFromSheet(sheetName);
 }
 
 function piwik_goals_sync() {
@@ -684,6 +698,7 @@ function piwik_goals_copy() {
     var msg = "Copying Goals. Please wait and follow the progress in the Status area.";
     show_update_running_msg(msg, "Status", 10);
     trigger_server({"script": "piwik_goals_copy"});
+    removeFiltersFromSheet(sheetName);
 }
 
 
